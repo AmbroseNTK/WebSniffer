@@ -33,8 +33,6 @@
             this.formAssistant1 = new DevExpress.XtraBars.FormAssistant();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.tabPane1 = new DevExpress.XtraBars.Navigation.TabPane();
-            this.tabNavigationPage1 = new DevExpress.XtraBars.Navigation.TabNavigationPage();
-            this.tabNavigationPage2 = new DevExpress.XtraBars.Navigation.TabNavigationPage();
             this.toolboxControl1 = new DevExpress.XtraToolbox.ToolboxControl();
             this.groupNav = new DevExpress.XtraToolbox.ToolboxGroup();
             this.btNewTab = new DevExpress.XtraToolbox.ToolboxItem();
@@ -43,6 +41,7 @@
             this.btNext = new DevExpress.XtraToolbox.ToolboxItem();
             this.btLink = new DevExpress.XtraToolbox.ToolboxItem();
             this.btRefresh = new DevExpress.XtraToolbox.ToolboxItem();
+            this.progressPanel1 = new DevExpress.XtraWaitForm.ProgressPanel();
             ((System.ComponentModel.ISupportInitialize)(this.tabPane1)).BeginInit();
             this.tabPane1.SuspendLayout();
             this.SuspendLayout();
@@ -53,31 +52,16 @@
             // 
             // tabPane1
             // 
-            this.tabPane1.Controls.Add(this.tabNavigationPage1);
-            this.tabPane1.Controls.Add(this.tabNavigationPage2);
+            this.tabPane1.Controls.Add(this.progressPanel1);
             this.tabPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPane1.Location = new System.Drawing.Point(0, 0);
             this.tabPane1.Name = "tabPane1";
-            this.tabPane1.Pages.AddRange(new DevExpress.XtraBars.Navigation.NavigationPageBase[] {
-            this.tabNavigationPage1,
-            this.tabNavigationPage2});
-            this.tabPane1.RegularSize = new System.Drawing.Size(915, 450);
-            this.tabPane1.SelectedPage = this.tabNavigationPage2;
-            this.tabPane1.Size = new System.Drawing.Size(915, 450);
+            this.tabPane1.RegularSize = new System.Drawing.Size(859, 450);
+            this.tabPane1.SelectedPage = null;
+            this.tabPane1.Size = new System.Drawing.Size(859, 450);
             this.tabPane1.TabIndex = 0;
             this.tabPane1.Text = "tabPane1";
-            // 
-            // tabNavigationPage1
-            // 
-            this.tabNavigationPage1.Caption = "tabNavigationPage1";
-            this.tabNavigationPage1.Name = "tabNavigationPage1";
-            this.tabNavigationPage1.Size = new System.Drawing.Size(57, 0);
-            // 
-            // tabNavigationPage2
-            // 
-            this.tabNavigationPage2.Caption = "tabNavigationPage2";
-            this.tabNavigationPage2.Name = "tabNavigationPage2";
-            this.tabNavigationPage2.Size = new System.Drawing.Size(897, 406);
+            this.tabPane1.SelectedPageChanged += new DevExpress.XtraBars.Navigation.SelectedPageChangedEventHandler(this.tabPane1_SelectedPageChanged);
             // 
             // toolboxControl1
             // 
@@ -95,6 +79,7 @@
             this.toolboxControl1.Size = new System.Drawing.Size(56, 450);
             this.toolboxControl1.TabIndex = 1;
             this.toolboxControl1.Text = "Terminal";
+            this.toolboxControl1.ItemClick += new DevExpress.XtraToolbox.ToolboxItemClickEventHandler(this.toolboxControl1_ItemClick);
             // 
             // groupNav
             // 
@@ -158,15 +143,28 @@
             this.btRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btRefresh.Image")));
             this.btRefresh.Name = "btRefresh";
             // 
+            // progressPanel1
+            // 
+            this.progressPanel1.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.progressPanel1.Appearance.Options.UseBackColor = true;
+            this.progressPanel1.Location = new System.Drawing.Point(315, 145);
+            this.progressPanel1.Name = "progressPanel1";
+            this.progressPanel1.Size = new System.Drawing.Size(246, 66);
+            this.progressPanel1.TabIndex = 0;
+            this.progressPanel1.Text = "progressPanel1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(915, 450);
-            this.Controls.Add(this.toolboxControl1);
             this.Controls.Add(this.tabPane1);
+            this.Controls.Add(this.toolboxControl1);
             this.Name = "Form1";
             this.Text = "NTK - Web Sniffer";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.tabPane1)).EndInit();
             this.tabPane1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -178,8 +176,6 @@
         private DevExpress.XtraBars.FormAssistant formAssistant1;
         private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private DevExpress.XtraBars.Navigation.TabPane tabPane1;
-        private DevExpress.XtraBars.Navigation.TabNavigationPage tabNavigationPage1;
-        private DevExpress.XtraBars.Navigation.TabNavigationPage tabNavigationPage2;
         private DevExpress.XtraToolbox.ToolboxControl toolboxControl1;
         private DevExpress.XtraToolbox.ToolboxGroup groupNav;
         private DevExpress.XtraToolbox.ToolboxItem btNewTab;
@@ -188,6 +184,7 @@
         private DevExpress.XtraToolbox.ToolboxItem btNext;
         private DevExpress.XtraToolbox.ToolboxItem btLink;
         private DevExpress.XtraToolbox.ToolboxItem btRefresh;
+        private DevExpress.XtraWaitForm.ProgressPanel progressPanel1;
     }
 }
 

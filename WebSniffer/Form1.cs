@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using Gecko;
 
 namespace WebSniffer
 {
@@ -14,7 +16,89 @@ namespace WebSniffer
     {
         public Form1()
         {
+            Xpcom.EnableProfileMonitoring = false;
+            Xpcom.Initialize("Firefox");
+
             InitializeComponent();
+        }
+        private MyWebBrowser mainWebBrowser;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            progressPanel1.Hide();
+            mainWebBrowser = createNewTab("google.com");
+        }
+        private MyWebBrowser createNewTab(string url)
+        {
+            MyWebBrowser browser = new MyWebBrowser();
+            browser.Dock = DockStyle.Fill;
+            browser.Navigating += onDocumentLoading;
+            browser.DocumentCompleted += onDocumentLoaded;
+            browser.NavigationError += onDocumentLoadError;
+            browser.Navigate(url);
+
+            DevExpress.XtraBars.Navigation.TabNavigationPage page = new DevExpress.XtraBars.Navigation.TabNavigationPage();
+            page.Caption = "Untitle";
+            page.Controls.Add(browser);
+            browser.MyPage = page;
+
+            tabPane1.Pages.Add(page);
+            tabPane1.SelectedPage = page;
+
+            return browser;
+        }
+        private MyWebBrowser CloseTab()
+        {
+            try
+            {
+                int index = tabPane1.SelectedPageIndex;
+                tabPane1.Pages.Remove(tabPane1.SelectedPage);
+                tabPane1.SelectedPageIndex = index - 1;
+                return (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
+            }
+            catch { }
+            return mainWebBrowser;
+        }
+        private void onDocumentLoading(object sender, EventArgs e)
+        {
+            progressPanel1.Show();
+        }
+        private void onDocumentLoaded(object sender, EventArgs e)
+        {
+            progressPanel1.Hide();
+            MyWebBrowser browser = (MyWebBrowser)sender;
+            btNewTab.Visible = true;
+        }
+        private void onDocumentLoadError(object sender, EventArgs e)
+        {
+            progressPanel1.Hide();
+        }
+        private void toolboxControl1_ItemClick(object sender, DevExpress.XtraToolbox.ToolboxItemClickEventArgs e)
+        {
+            if (e.Item == btNewTab)
+            {
+                btNewTab.Visible = false;
+                mainWebBrowser = createNewTab("google.com");
+            }
+            if (e.Item == btCloseTab)
+            {
+                mainWebBrowser = CloseTab();
+            }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            progressPanel1.Location = new Point(Width / 2 - progressPanel1.Width / 2, Height / 2 - progressPanel1.Height / 2);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            tabPane1.Dispose();
+            Xpcom.Shutdown();
+        }
+
+        private void tabPane1_SelectedPageChanged(object sender, DevExpress.XtraBars.Navigation.SelectedPageChangedEventArgs e)
+        {
+            mainWebBrowser = (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
         }
     }
 }
