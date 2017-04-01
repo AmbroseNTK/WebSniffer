@@ -33,6 +33,7 @@
             this.formAssistant1 = new DevExpress.XtraBars.FormAssistant();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.tabPane1 = new DevExpress.XtraBars.Navigation.TabPane();
+            this.progressPanel1 = new DevExpress.XtraWaitForm.ProgressPanel();
             this.toolboxControl1 = new DevExpress.XtraToolbox.ToolboxControl();
             this.groupNav = new DevExpress.XtraToolbox.ToolboxGroup();
             this.btNewTab = new DevExpress.XtraToolbox.ToolboxItem();
@@ -41,7 +42,6 @@
             this.btNext = new DevExpress.XtraToolbox.ToolboxItem();
             this.btLink = new DevExpress.XtraToolbox.ToolboxItem();
             this.btRefresh = new DevExpress.XtraToolbox.ToolboxItem();
-            this.progressPanel1 = new DevExpress.XtraWaitForm.ProgressPanel();
             ((System.ComponentModel.ISupportInitialize)(this.tabPane1)).BeginInit();
             this.tabPane1.SuspendLayout();
             this.SuspendLayout();
@@ -56,12 +56,23 @@
             this.tabPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPane1.Location = new System.Drawing.Point(0, 0);
             this.tabPane1.Name = "tabPane1";
+            this.tabPane1.PageProperties.ShowMode = DevExpress.XtraBars.Navigation.ItemShowMode.ImageAndText;
             this.tabPane1.RegularSize = new System.Drawing.Size(859, 450);
             this.tabPane1.SelectedPage = null;
             this.tabPane1.Size = new System.Drawing.Size(859, 450);
             this.tabPane1.TabIndex = 0;
             this.tabPane1.Text = "tabPane1";
             this.tabPane1.SelectedPageChanged += new DevExpress.XtraBars.Navigation.SelectedPageChangedEventHandler(this.tabPane1_SelectedPageChanged);
+            // 
+            // progressPanel1
+            // 
+            this.progressPanel1.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.progressPanel1.Appearance.Options.UseBackColor = true;
+            this.progressPanel1.Location = new System.Drawing.Point(315, 145);
+            this.progressPanel1.Name = "progressPanel1";
+            this.progressPanel1.Size = new System.Drawing.Size(246, 66);
+            this.progressPanel1.TabIndex = 0;
+            this.progressPanel1.Text = "progressPanel1";
             // 
             // toolboxControl1
             // 
@@ -142,16 +153,6 @@
             this.btRefresh.Caption = "Refresh";
             this.btRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btRefresh.Image")));
             this.btRefresh.Name = "btRefresh";
-            // 
-            // progressPanel1
-            // 
-            this.progressPanel1.Appearance.BackColor = System.Drawing.Color.Transparent;
-            this.progressPanel1.Appearance.Options.UseBackColor = true;
-            this.progressPanel1.Location = new System.Drawing.Point(315, 145);
-            this.progressPanel1.Name = "progressPanel1";
-            this.progressPanel1.Size = new System.Drawing.Size(246, 66);
-            this.progressPanel1.TabIndex = 0;
-            this.progressPanel1.Text = "progressPanel1";
             // 
             // Form1
             // 

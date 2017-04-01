@@ -22,10 +22,16 @@ namespace WebSniffer
             InitializeComponent();
         }
         private MyWebBrowser mainWebBrowser;
+        private Linker linker;
         private void Form1_Load(object sender, EventArgs e)
         {
             progressPanel1.Hide();
+            btCloseTab.Visible = false;
             mainWebBrowser = createNewTab("google.com");
+            linker = new Linker();
+            Controls.Add(linker);
+            linker.BringToFront();
+            linker.Hide();
         }
         private MyWebBrowser createNewTab(string url)
         {
@@ -48,15 +54,15 @@ namespace WebSniffer
         }
         private MyWebBrowser CloseTab()
         {
-            try
+
+            int index = tabPane1.SelectedPageIndex;
+            tabPane1.Pages.Remove(tabPane1.SelectedPage);
+            if (tabPane1.Pages.Count == 1)
             {
-                int index = tabPane1.SelectedPageIndex;
-                tabPane1.Pages.Remove(tabPane1.SelectedPage);
-                tabPane1.SelectedPageIndex = index - 1;
-                return (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
+                btCloseTab.Visible = false;
             }
-            catch { }
-            return mainWebBrowser;
+            return (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
+            
         }
         private void onDocumentLoading(object sender, EventArgs e)
         {
@@ -78,10 +84,32 @@ namespace WebSniffer
             {
                 btNewTab.Visible = false;
                 mainWebBrowser = createNewTab("google.com");
+                btCloseTab.Visible = true;
             }
             if (e.Item == btCloseTab)
             {
-                mainWebBrowser = CloseTab();
+                if (tabPane1.Pages.Count > 1)
+                {
+                    mainWebBrowser = CloseTab();
+                }
+            }
+            if(e.Item == btBack)
+            {
+                mainWebBrowser.GoBack();
+            }
+            if (e.Item == btNext)
+            {
+                mainWebBrowser.GoForward();
+            }
+            if (e.Item == btRefresh)
+            {
+                mainWebBrowser.Refresh();
+            }
+            if (e.Item == btLink)
+            {
+                linker.MyBrowser = mainWebBrowser;
+                linker.Location = new Point(Cursor.Position.X-linker.Width, Cursor.Position.Y-linker.Height);
+                toggleLinker();
             }
         }
 
@@ -98,7 +126,22 @@ namespace WebSniffer
 
         private void tabPane1_SelectedPageChanged(object sender, DevExpress.XtraBars.Navigation.SelectedPageChangedEventArgs e)
         {
-            mainWebBrowser = (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
+            try
+            {
+                mainWebBrowser = (MyWebBrowser)(tabPane1.SelectedPage.Controls["browser"]);
+            }
+            catch { }
+        }
+        private void toggleLinker()
+        {
+            if (linker.Visible == true)
+            {
+                linker.Hide();
+            }
+            else
+            {
+                linker.Show();
+            }
         }
     }
 }
