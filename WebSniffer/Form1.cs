@@ -21,127 +21,127 @@ namespace WebSniffer
 
             InitializeComponent();
         }
-        private MyWebBrowser mainWebBrowser;
-        private Linker linker;
+        MyTabPane tabPane;
+        Linker linker;
         private void Form1_Load(object sender, EventArgs e)
         {
-            progressPanel1.Hide();
-            btCloseTab.Visible = false;
-            mainWebBrowser = createNewTab("google.com");
             linker = new Linker();
             Controls.Add(linker);
-            linker.BringToFront();
             linker.Hide();
-        }
-        private MyWebBrowser createNewTab(string url)
-        {
-            MyWebBrowser browser = new MyWebBrowser();
-            browser.Dock = DockStyle.Fill;
-            browser.Navigating += onDocumentLoading;
-            browser.DocumentCompleted += onDocumentLoaded;
-            browser.NavigationError += onDocumentLoadError;
-            browser.Navigate(url);
+            tabPane = new MyTabPane();
+            tabPane.Dock = DockStyle.Fill;
+            Controls.Add(tabPane);
 
-            DevExpress.XtraBars.Navigation.TabNavigationPage page = new DevExpress.XtraBars.Navigation.TabNavigationPage();
-            page.Caption = "Untitle";
-            page.Controls.Add(browser);
-            browser.MyPage = page;
-
-            tabPane1.Pages.Add(page);
-            tabPane1.SelectedPage = page;
-
-            return browser;
+            MyTabPage page = new MyTabPage();
+            tabPane.AddMyTabPage(page);
+           
         }
-        private MyWebBrowser CloseTab()
-        {
-
-            int index = tabPane1.SelectedPageIndex;
-            tabPane1.Pages.Remove(tabPane1.SelectedPage);
-            if (tabPane1.Pages.Count == 1)
-            {
-                btCloseTab.Visible = false;
-            }
-            return (MyWebBrowser)tabPane1.SelectedPage.Controls["browser"];
-            
-        }
-        private void onDocumentLoading(object sender, EventArgs e)
-        {
-            progressPanel1.Show();
-        }
-        private void onDocumentLoaded(object sender, EventArgs e)
-        {
-            progressPanel1.Hide();
-            MyWebBrowser browser = (MyWebBrowser)sender;
-            btNewTab.Visible = true;
-        }
-        private void onDocumentLoadError(object sender, EventArgs e)
-        {
-            progressPanel1.Hide();
-        }
+    
         private void toolboxControl1_ItemClick(object sender, DevExpress.XtraToolbox.ToolboxItemClickEventArgs e)
         {
             if (e.Item == btNewTab)
             {
-                btNewTab.Visible = false;
-                mainWebBrowser = createNewTab("google.com");
-                btCloseTab.Visible = true;
+                MyTabPage page = new MyTabPage();
+                tabPane.AddMyTabPage(page);
+                tabPane.SelectedTabPageIndex = tabPane.TabPages.Count - 1;
+                page.Appearance.Header.BeginUpdate();
+
+                page.Appearance.Header.BackColor = getRandomColor();
+                page.Appearance.Header.EndUpdate();
+
             }
             if (e.Item == btCloseTab)
             {
-                if (tabPane1.Pages.Count > 1)
-                {
-                    mainWebBrowser = CloseTab();
-                }
+                tabPane.RemoveThisPage();
             }
             if(e.Item == btBack)
             {
-                mainWebBrowser.GoBack();
+                tabPane.GetThisWebBrowser().GoBack();
             }
             if (e.Item == btNext)
             {
-                mainWebBrowser.GoForward();
+                tabPane.GetThisWebBrowser().GoForward();
             }
             if (e.Item == btRefresh)
             {
-                mainWebBrowser.Refresh();
+                tabPane.GetThisWebBrowser().Refresh();
             }
             if (e.Item == btLink)
             {
-                linker.MyBrowser = mainWebBrowser;
-                linker.Location = new Point(Cursor.Position.X-linker.Width, Cursor.Position.Y-linker.Height);
-                toggleLinker();
+                if (linker.Visible)
+                {
+                    linker.Hide();
+                }
+                else
+                {
+                    linker.Location = new Point(Cursor.Position.X - linker.Width, Cursor.Position.Y - linker.Height);
+                    linker.Show();
+                    linker.MyBrowser = tabPane.GetThisWebBrowser();
+                }
             }
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
-            progressPanel1.Location = new Point(Width / 2 - progressPanel1.Width / 2, Height / 2 - progressPanel1.Height / 2);
+            //progressPanel1.Location = new Point(Width / 2 - progressPanel1.Width / 2, Height / 2 - progressPanel1.Height / 2);
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            tabPane1.Dispose();
-            Xpcom.Shutdown();
+            //tabPane.Dispose();
+            //Xpcom.Shutdown();
         }
 
         private void tabPane1_SelectedPageChanged(object sender, DevExpress.XtraBars.Navigation.SelectedPageChangedEventArgs e)
         {
-            try
-            {
-                mainWebBrowser = (MyWebBrowser)(tabPane1.SelectedPage.Controls["browser"]);
-            }
-            catch { }
+           
         }
         private void toggleLinker()
         {
-            if (linker.Visible == true)
+           
+        }
+        int colored = 0;
+        public Color getRandomColor()
+        {
+           
+            Random rand = new Random();
+            int current = rand.Next(0, 10);
+            while (current == colored)
             {
-                linker.Hide();
+                current = rand.Next(0, 10);
             }
-            else
+            switch (current)
             {
-                linker.Show();
+                case 0:
+                    return Color.Chocolate;
+                case 1:
+                    return Color.BurlyWood;
+                case 2:
+                    return Color.BlueViolet;
+                case 3:
+                    return Color.DodgerBlue;
+                case 4:
+                    return Color.OrangeRed;
+                case 5:
+                    return Color.PaleGreen;
+                case 6:
+                    return Color.PapayaWhip;
+                case 7:
+                    return Color.LightPink;
+                case 8:
+                    return Color.LightSeaGreen;
+                case 9:
+                    return Color.Maroon;
             }
+            return Color.Black;
+        }
+        private void onDocumentLoading(object sender, EventArgs e)
+        {
+            tabPane.SelectedTabPage.Text = "Loading...";
+        }
+        private void onDocumentLoaded(object sender,EventArgs e)
+        {
+            tabPane.SelectedTabPage.Text= tabPane.GetThisWebBrowser().DocumentTitle; ;
         }
     }
 }

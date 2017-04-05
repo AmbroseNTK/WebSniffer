@@ -3,26 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DevExpress.XtraBars.Navigation;
+using Gecko;
 using Gecko.Events;
 
 namespace WebSniffer
 {
     class MyWebBrowser:Gecko.GeckoWebBrowser
     {
-        private DevExpress.XtraBars.Navigation.TabNavigationPage myPage;
+        MyTabPage parentPage;
 
-        public TabNavigationPage MyPage { get => myPage; set => myPage = value; }
-        protected override void OnDocumentCompleted(GeckoDocumentCompletedEventArgs e)
-        {
-            myPage.Caption = this.DocumentTitle;
-            base.OnDocumentCompleted(e);
-        }
+        internal MyTabPage ParentPage { get => parentPage; set => parentPage = value; }
+
         protected override void OnNavigating(GeckoNavigatingEventArgs e)
         {
-            myPage.Caption = "Loading...";
             base.OnNavigating(e);
+            parentPage.Text = "Loading...";
         }
-
+        protected override void OnNavigationError(GeckoNavigationErrorEventArgs e)
+        {
+            base.OnNavigationError(e);
+            parentPage.Text = "Cannot reach this page";
+        }
+        protected override void OnDocumentCompleted(GeckoDocumentCompletedEventArgs e)
+        {
+            base.OnDocumentCompleted(e);
+            parentPage.Text = DocumentTitle;
+        }
     }
 }

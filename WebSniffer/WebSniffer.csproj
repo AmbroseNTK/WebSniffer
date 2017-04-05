@@ -90,6 +90,12 @@
     <Compile Include="Linker.Designer.cs">
       <DependentUpon>Linker.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyTabPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MyWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,6 +118,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Firefox\omni.ja" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
